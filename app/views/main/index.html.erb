@@ -1,9 +1,239 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+	<style type="text/javascript" src="jquery.js" /></style>
+	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css" />
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-<h1>Hello Reedly!</h1>
+	<div class="row">
+		<div class="col-md-2"></div>
+			<div class="col-md-8">
+				<img class="main-image" alt="Reedly" src="reedly-banner-01.png"/>
+			</div>
+		<div class="col-md-2"></div>
+	</div>
+	<div class="row down">
+		<div class="col-md-1"></div>
+		<div class="col-md-5 rss-feeds">
+			<div>
+				<div class="rss-feed-box">
+					<input id="rss1" type="checkbox" class="input-check rss-side"/><label for="rss1">This one.</label>
+				</div>
+				<div class="rss-feed-box">
+					<input id="rss2" type="checkbox" class="input-check rss-side"/><label for="rss2">This two.</label>
+				</div>
+				<div class="rss-feed-box">
+					<input id="rss3" type="checkbox" class="input-check rss-side"/><label for="rss3">This three.</label>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-5 stiff">
+			<div class="panel-group text-center" id="accordion" role="tablist" aria-multiselectable="true">
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingOne">
+				      <h4 class="panel-title">
+				        <a id="collapseOne-head" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+				          Blogs
+				        </a>
+				        <div class="two-buttons">
+				        	<div class="dropdown">
+							  <button class="btn btn-default dropdown-toggle custom-button" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+							    <img alt="Options" src="dots_hamburger.png" />
+							  </button>
+							  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Publish</a></li>
+							  </ul>
+							</div>
+				    	</div>
+				      </h4>
+				    </div>
+				    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+				      <div class="panel-body" id="collapseOne-body">
 
+				      </div>
+				    </div>
+				  </div>
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingTwo">
+				      <h4 class="panel-title">
+				        <a id="collapseTwo-head"  class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+				          Tech News
+				        </a>
+				        <div class="two-buttons">
+				        	<div class="dropdown">
+							  <button class="btn btn-default dropdown-toggle custom-button" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+							    <img alt="Options" src="dots_hamburger.png" />
+							  </button>
+							  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Publish</a></li>
+							  </ul>
+							</div>
+				    	</div>
+				      </h4>
+				    </div>
+				    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+				      <div class="panel-body" id="collapseTwo-body">
+				       
+				      </div>
+				    </div>
+				  </div>
+				  <div class="panel panel-default">
+				    <div class="panel-heading" role="tab" id="headingThree">
+				      <h4 class="panel-title">
+				        <a id="collapseThree-head" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+				          Thesis
+				        </a>
+			        	<div class="two-buttons">
+				        	<div class="dropdown">
+							  <button class="btn btn-default dropdown-toggle custom-button" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+							    <img alt="Options" src="dots_hamburger.png" />
+							  </button>
+							  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+							    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Publish</a></li>
+							  </ul>
+							</div>
+				    	</div>
+				      </h4>
+				    </div>
+				    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+				      <div class="panel-body" id="collapseThree-body">
+				        
+				      </div>
+				    </div>
+				  </div>
+				</div>
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+	
+
+
+
+
+	<script>
+
+		var openedBook = "collapseOne";
+		var numberOfRSS = 3;
+		var clicked = new Array();
+
+		function getNewRSS(content, id) {
+			return "<div id='"+id+"-"+openedBook+"' class='rss-feed-box'><input type='checkbox' class='input-check book-side'/><label for='"+id+"-book'>"+content+"</label></div>";
+		}		
+
+		function inArray(id) {
+			if (clicked.indexOf(id) > -1) {
+				return true;
+			}
+			return false;
+		}
+
+		function delFromArray(id) {
+			var index = clicked.indexOf(id);
+			if (index > -1) {
+				clicked.splice(index,1);
+			}
+		}
+
+		var moveMe = function() {
+			
+			// If it's not in the array, then push it.
+			if (!inArray("#"+this.id)) {
+				clicked.push(this.id);
+				// We need to push it to the book.
+				var content = $("label[for='"+this.id+"']").html();
+				var toAdd = getNewRSS(content, this.id);
+				$("#"+openedBook).append(toAdd);
+			} else {
+				delFromArray(this.id);
+				$("#"+this.id+"-"+openedBook).remove();
+			}
+		};
+
+		$(".rss-side").on("click", moveMe);
+
+		$("#accordion").on("shown.bs.collapse", function(e) {
+			openedBook = e.target.id;
+			clicked = new Array();
+			for (var i = 0; i < numberOfRSS; i++) {
+				// Changing the arrows if need be.
+				if ()
+
+				// If the openedBook does not contain a div named rss.
+				if (!($("#"+openedBook).find("#rss"+i+"-"+openedBook).length)) {
+					$("#rss"+i).prop('checked', false);
+				} else {
+					$("#rss"+i).prop('checked', true);
+					clicked.push("#rss"+i);
+				}
+			}
+			// Uncheck all things on left, unless they are checked under current one.
+		});
+
+
+		/*$(document).ready(function(){    
+		    $('#accordion').on('shown', function () {
+		    	alert("GETTING HERE");
+		       $(".icon-chevron-down").removeClass("icon-chevron-down").addClass("icon-chevron-up");
+		       alert($(this).child[0].html);
+		    });
+
+		    $('#accordProfile').on('hidden', function () {
+		       $(".icon-chevron-up").removeClass("icon-chevron-up").addClass("icon-chevron-down");
+		       alert($(this).attr('id'));
+		    });
+		});*/
+	</script>
+
+	<!--<script type="text/javascript">
+		var id = "news-tab";
+		$(document).ready(function() {
+			$('#Tabs li').click(function() {
+				// Setting the temp variable to the string of the news pull out.
+				var temp = "#RightMenu #" + id.substring(0, id.indexOf("-"));
+
+				// Only going to do this if it's not the one currently out.
+				if ($(this).attr('id').search(id) < 0) {
+					// Closing the last one out.
+					$(temp).animate({ width: 'toggle'}, 1000);
+
+					// Animating the actual tab we want.
+					var newOne = "#RightMenu #" + $(this).attr('id').substring(0, $(this).attr('id').indexOf("-"));
+					
+
+					$(newOne).animate({ width: 'toggle'}, 1000);
+
+					// Setting the new id.
+					id = $(this).attr('id');
+				}
+			});
+		});
+
+	/*	$(document).ready(function () {
+		    $('#news-tab').click(function () {
+		        $('#RightMenu #news').animate({
+		            width: 'toggle'
+		        }, 1000);
+		    });
+		});
+		$(document).ready(function () {
+		    $('#tech-tab').click(function () {
+		        $('#RightMenu #tech').animate({
+		            width: 'toggle'
+		        }, 1000);
+		    });
+		});
+		$(document).ready(function () {
+		    $('#other-tab').click(function () {
+		        $('#RightMenu #other').animate({
+		            width: 'toggle'
+		        }, 1000);
+		    });
+		});*/
+	</script>-->
+
+	<footer>
+	</footer>
 </body>
 </html>
