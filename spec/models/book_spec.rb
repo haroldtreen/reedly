@@ -1,5 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe Book, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+describe Book, :type => :model do
+	before :all do
+		@book = Book.create(title: "First Book", description: "Description", links: "www.g.c;www.e.c;www.t.c")
+	end
+
+	it{ expect(@book).to respond_to('title') }
+	it{ expect(@book).to respond_to('description') }
+	it{ expect(@book).to respond_to('links') }
 end
