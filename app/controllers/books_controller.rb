@@ -4,11 +4,17 @@ class BooksController < ApplicationController
 	end
 
 	def create
-		
+		Book.create(book_params)
 	end
 
 	def publish
 		book = Book.find(params[:id])
-		PublishService.publish(book)
+		PublishService.send_to_kindle(book)
+	end
+
+	private 
+
+	def book_params
+		params.require(:title).permit(:links, :description)
 	end
 end

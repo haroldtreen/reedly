@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   resources :books do
     member do
-      post 'publish'
+      get 'publish'
     end
   end
 
