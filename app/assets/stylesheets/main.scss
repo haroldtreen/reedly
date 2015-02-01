@@ -231,8 +231,9 @@ label {
 
 .article-summary {
 	width:100%;
-	white-space: nowrap;
 	overflow: hidden;
+	line-height:1.2em;
+	height:3.6em;
 	text-overflow: ellipsis;
 }
 
