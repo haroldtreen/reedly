@@ -10,6 +10,10 @@ class BooksController < ApplicationController
 		render json: book
 	end
 
+	def show
+		render json: Book.find(params[:id])
+	end
+
 	def publish
 		book = Book.find(params[:id])
 		Reedler.to_epub(book)
@@ -19,6 +23,6 @@ class BooksController < ApplicationController
 	private 
 
 	def book_params
-		params.require(:book).permit(:title, { links: [] }, :description)
+		params.require(:book).permit(:title, { links: [] }, :description, :used_id)
 	end
 end
