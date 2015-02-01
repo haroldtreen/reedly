@@ -17,6 +17,13 @@
 	<div class="row down">
 		<div class="col-md-1"></div>
 		<div class="col-md-5 rss-feeds">
+			<select class="rss-feed-list">
+				<option value="volvo">CBC</option>
+				<option value="saab">Yahoo</option>
+				<option value="opel">New York Times</option>
+				<option value="audi">Audi</option>
+			</select>
+			
 			<div>
 				<div class="rss-feed-box">
 					<input id="rss1" type="checkbox" class="input-check rss-side"/><label for="rss1">This one.</label>
@@ -26,6 +33,9 @@
 				</div>
 				<div class="rss-feed-box">
 					<input id="rss3" type="checkbox" class="input-check rss-side"/><label for="rss3">This three.</label>
+				</div>
+				<div class="rss-feed-box">
+					<input id="rss4" type="checkbox" class="input-check rss-side"/><label for="rss4">This Four.</label>
 				</div>
 			</div>
 		</div>
@@ -49,9 +59,9 @@
 				    	</div>
 				      </h4>
 				    </div>
-				    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+				    <div id="collapseOne" class="panel-collapse collapse in not-too-tall" role="tabpanel" aria-labelledby="headingOne">
 				      <div class="panel-body" id="collapseOne-body">
-
+						<p class="book-intro">Select books from the left to add to this book</p>
 				      </div>
 				    </div>
 				  </div>
@@ -73,9 +83,9 @@
 				    	</div>
 				      </h4>
 				    </div>
-				    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+				    <div id="collapseTwo" class="panel-collapse collapse not-too-tall" role="tabpanel" aria-labelledby="headingTwo">
 				      <div class="panel-body" id="collapseTwo-body">
-				       
+				       	<p class="book-intro">Select books from the left to add to this book</p>
 				      </div>
 				    </div>
 				  </div>
@@ -97,15 +107,18 @@
 				    	</div>
 				      </h4>
 				    </div>
-				    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+				    <div id="collapseThree" class="panel-collapse collapse not-too-tall" role="tabpanel" aria-labelledby="headingThree">
 				      <div class="panel-body" id="collapseThree-body">
-				        
+				        <p class="book-intro">Select books from the left to add to this book</p>
 				      </div>
 				    </div>
 				  </div>
 				</div>
 		</div>
-		<div class="col-md-1"></div>
+		<div>
+			<a href="#" id="add-book"><img alt="Add Book" src="plus.png" /></a>
+		</div>
+	
 	</div>
 	
 
@@ -115,11 +128,11 @@
 	<script>
 
 		var openedBook = "collapseOne";
-		var numberOfRSS = 3;
+		var numberOfRSS = 4;
 		var clicked = new Array();
 
 		function getNewRSS(content, id) {
-			return "<div id='"+id+"-"+openedBook+"' class='rss-feed-box'><input type='checkbox' class='input-check book-side'/><label for='"+id+"-book'>"+content+"</label></div>";
+			return "<div id='"+id+"-"+openedBook+"' class='rss-feed-box'><div class='up-down'><div class='move-up'><img alt='Up' src='arrow_article_up.png'/></div> <div class='move-down'><img alt='Down' src='arrow_article_down.png' /></div></div><label for='"+id+"-book'>"+content+"</label></div>";
 		}		
 
 		function inArray(id) {
@@ -140,13 +153,16 @@
 			
 			// If it's not in the array, then push it.
 			if (!inArray("#"+this.id)) {
-				clicked.push(this.id);
+				clicked.push("#"+this.id);
 				// We need to push it to the book.
 				var content = $("label[for='"+this.id+"']").html();
 				var toAdd = getNewRSS(content, this.id);
 				$("#"+openedBook).append(toAdd);
+				// Unbinding any previous ones and moving the new ones up.
+				$(".move-up").attr('onclick','').unbind('click').on("click", moveup);
+				$(".move-down").attr('onclick','').unbind('click').on("click", movedown);
 			} else {
-				delFromArray(this.id);
+				delFromArray("#"+this.id);
 				$("#"+this.id+"-"+openedBook).remove();
 			}
 		};
@@ -156,9 +172,7 @@
 		$("#accordion").on("shown.bs.collapse", function(e) {
 			openedBook = e.target.id;
 			clicked = new Array();
-			for (var i = 0; i < numberOfRSS; i++) {
-				// Changing the arrows if need be.
-				if ()
+			for (var i = 0; i <= numberOfRSS; i++) {
 
 				// If the openedBook does not contain a div named rss.
 				if (!($("#"+openedBook).find("#rss"+i+"-"+openedBook).length)) {
@@ -168,9 +182,61 @@
 					clicked.push("#rss"+i);
 				}
 			}
-			// Uncheck all things on left, unless they are checked under current one.
 		});
 
+		var moveup = function(e) {
+			var id = e.target.parentNode.parentNode.parentNode.id;
+			var parentId = id.substring(id.indexOf("-")+1);
+			var children = $("#"+parentId).children();
+			var divToMoveLocation = 0;
+			for (var i = 0; i < children.length; i++) {
+				if (children[i].id == id) {
+					divToMoveLocation = i;
+					break;
+				}
+			}
+			if (children.length > 2) {
+				// We can potentially move up.
+				if (children[1].id != id) {
+					// We are not the first in the row.
+					var oldChild = children[divToMoveLocation-1].innerHTML;
+					children[divToMoveLocation-1].innerHTML = children[divToMoveLocation].innerHTML;
+					children[divToMoveLocation].innerHTML = oldChild;
+					// Unbinding any previous ones and moving the new ones up.
+					$(".move-up").attr('onclick','').unbind('click').on("click", moveup);
+					$(".move-down").attr('onclick','').unbind('click').on("click", movedown);
+				}
+			}
+			
+			//alert(e.target.parentNode.parentNode.parentNode.id);
+
+		}
+
+		var movedown = function(e) {
+			var id = e.target.parentNode.parentNode.parentNode.id;
+			var parentId = id.substring(id.indexOf("-")+1);
+			var children = $("#"+parentId).children();
+			var divToMoveLocation = 0;
+			var length = children.length;
+			for (var i = 0; i < children.length; i++) {
+				if (children[i].id == id) {
+					divToMoveLocation = i;
+					break;
+				}
+			}
+			if (children.length > 2) {
+				// We can potentially move up.
+				if (children[length-1].id != id) {
+					// We are not the last in the row.
+					var oldChild = children[divToMoveLocation+1].innerHTML;
+					children[divToMoveLocation+1].innerHTML = children[divToMoveLocation].innerHTML;
+					children[divToMoveLocation].innerHTML = oldChild;
+					// Unbinding any previous ones and moving the new ones up.
+					$(".move-up").attr('onclick','').unbind('click').on("click", moveup);
+					$(".move-down").attr('onclick','').unbind('click').on("click", movedown);
+				}
+			}
+		}
 
 		/*$(document).ready(function(){    
 		    $('#accordion').on('shown', function () {
