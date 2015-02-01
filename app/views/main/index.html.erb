@@ -62,7 +62,7 @@
 				    </div>
 				    <div id="collapseOne" class="panel-collapse collapse in not-too-tall" role="tabpanel" aria-labelledby="headingOne">
 				      <div class="panel-body" id="collapseOne-body">
-						<p class="book-intro">Select books from the left to add to this book</p>
+						<p class="book-intro">Select articles from the list to add to this book</p>
 				      </div>
 				    </div>
 				  </div>
@@ -86,7 +86,7 @@
 				    </div>
 				    <div id="collapseTwo" class="panel-collapse collapse not-too-tall" role="tabpanel" aria-labelledby="headingTwo">
 				      <div class="panel-body" id="collapseTwo-body">
-				       	<p class="book-intro">Select books from the left to add to this book</p>
+				       	<p class="book-intro">Select articles from the list to add to this book<</p>
 				      </div>
 				    </div>
 				  </div>
@@ -110,7 +110,7 @@
 				    </div>
 				    <div id="collapseThree" class="panel-collapse collapse not-too-tall" role="tabpanel" aria-labelledby="headingThree">
 				      <div class="panel-body" id="collapseThree-body">
-				        <p class="book-intro">Select books from the left to add to this book</p>
+				        <p class="book-intro">Select articles from the list to add to this book<</p>
 				      </div>
 				    </div>
 				  </div>
@@ -328,14 +328,36 @@
 
 		$("#add-rss-button").on("click", function(e) {
 			var url = document.getElementById('add-to-rss-input').value;
-			alert(url);
 
 			$.ajax({
 				type: 'POST',
-				url: "/users/1/updatefeeds?feed="+url,
+				url: "/users/1/update_feeds?feed="+url,
 				success: function(resultData) {
 					if (resultData['id'] > 0) {
-						alert("GOOD");
+						$.ajax({url:"http://127.0.0.1:3000/users/1/feeds", success:function(result){
+					    feeds = result;
+					    rssFeeds = new Array();
+					    numberOfRSS = 1;
+					    $("#rss-feed-article-list").empty();
+					    $(".rss-feed-list").empty();
+					    document.getElementById('add-to-rss-input').value = "";
+					    $(".rss-feed-list").append("<option value='Everything'>All RSS Feeds</option>");
+					    rssFeeds.push("Everything");
+					    currentFeed = rssFeeds[0];
+					    for (var rss in feeds) {
+					    	rssFeeds.push(rss);
+					    	$(".rss-feed-list").append("<option value='"+rss+"'>" + rss + "</option>");
+					    	for (var article in feeds[rss]) {
+					    			$("#rss-feed-article-list").append("<div data-rss-tag='"+rss+"' class='rss-feed-box'><input id='rss"+numberOfRSS+"' type='checkbox' class='input-check rss-side' /><label for='rss"+numberOfRSS+"'>"+feeds[rss][article]['title']+"</label>" +
+					    				"<p class='article-summary'>"+strip(feeds[rss][article]['summary'])+"</p>"+
+					    				"<p class='article-link'>'" + feeds[rss][article]['link'] + "'</p>" +
+					    				"</div>");
+					    			numberOfRSS++;
+					    		}
+					    }
+					    $(".rss-side").on("click", moveMe);
+					    }
+					});
 					}
 				}
 			});

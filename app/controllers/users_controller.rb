@@ -9,6 +9,7 @@ class UsersController < ApplicationController
 	end
 
 	def update_feeds
+		ap params
 		@user = User.find_by(id: params[:id])
 		@user.feeds = @user.feeds + ";#{params[:feed].gsub(/\'/, "")}"
 		@user.save
