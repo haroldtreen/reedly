@@ -87,6 +87,7 @@
 .rss-feeds {
 	background-color:rgb(243,107,42);
 	border-radius: 3px;
+	margin-top:50px;
 }
 
 .rss-feed-box {
@@ -176,4 +177,54 @@ label {
 .two-buttons {
 	display:inline-flex;
 	float:right;
+}
+
+.rss-feed-list {
+	position:absolute;
+	top:-50px;
+	width:100%;
+	left:0;
+}
+
+.rss-feed-list {
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    overflow: hidden;
+    background-color: #fff;
+}
+
+.rss-feed-list select {
+    padding: 5px 8px;
+    width: 130%;
+    border: none;
+    box-shadow: none;
+    background-color: transparent;
+    background-image: none;
+    -webkit-appearance: none;
+       -moz-appearance: none;
+            appearance: none;
+}
+
+.rss-feed-list select:focus {
+    outline: none;
+}
+
+.up-down {
+	width:auto;
+	float: left;
+	left: 0;
+	margin-left: 20px;
+	margin-right: -20px;
+}
+
+.book-intro {
+	border-bottom:1px solid black;
+	padding-bottom:20px;
+}
+
+.not-too-tall {
+	max-height:300px;
+	overflow:auto;
 }
