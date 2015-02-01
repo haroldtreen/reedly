@@ -4,6 +4,7 @@
 	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css" />
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="32px_32px.png">
 </head>
 <body>
 	<div class="top-image">
@@ -12,7 +13,8 @@
 		    <img class="nice-bar" alt="Menu" src="hamburger.png" />
 		  </button>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-		    <li role="presentation"><a role="menuitem" tabindex="-1" id="collapseTwo-pub" href="#">Publish</a></li>
+		    <li role="presentation"><a role="menuitem" tabindex="-1" id="menu-pub" href="#">Profile</a></li>
+		    <li role="presentation"><a role="menuitem" tabindex="-1" id="menu-pub" href="#">Log Out</a></li>
 		  </ul>
 		</div>
 		
@@ -30,7 +32,10 @@
 			<select class="rss-feed-list">
 				
 			</select>
-			
+			<div class="add-to-rss">
+				<input type="text" id="add-to-rss-input" placeholder="Add an RSS feed to your list"/>
+				<img id="add-rss-button" alt="Add RSS Feed" src="plus.png" />
+			</div>
 			<div id="rss-feed-article-list">
 				
 			</div>
@@ -273,30 +278,107 @@
     			dataType: "json",
 				success: function(resultData) {
 					if (resultData['id'] > 0) {
-						alert("Your book has been sent.";
-					{
+						alert("Your book has been sent.");
+					}
 				}
 			});
 			
 		});
 
 		$("#collapseTwo-pub").on("click", function() {
-			var id = "#collapseTwo";
+			
 			var title = $("#collapseTwo-head").text().trim();
 			
-			$.ajax({url:"http://127.0.0.1:3000/books/1/feeds", success:function(result){
+			var children = $("#collapseTwo").children();
+
+			var myKeyVals = [];
+
+			for (var i = 1; i < children.length; i++) {
+				var id = children[i].id.substring(0, children[i].id.indexOf("-"));
+				var clickInput = $("#"+id).next().next().next().text();
 				
-			    }
+				myKeyVals[i] = clickInput;
+			}
+
+			var toSend = {"book":{
+					"title":title,
+					"description":"First From Web",
+					"links": myKeyVals
+				}
+			};
+
+			toSend = JSON.stringify(toSend);
+			//toSend = toSend.replace("\'","");
+
+			console.log(toSend);
+
+			$.ajax({
+				type: 'POST',
+				url: "/books",
+				data: toSend,
+				contentType: "application/json; charset=utf-8",
+    			dataType: "json",
+				success: function(resultData) {
+					if (resultData['id'] > 0) {
+						alert("Your book has been sent.");
+					}
+				}
+			});
+		});
+
+		$("#add-rss-button").on("click", function(e) {
+			var url = document.getElementById('add-to-rss-input').value;
+			alert(url);
+
+			$.ajax({
+				type: 'POST',
+				url: "/users/1/updatefeeds?feed="+url,
+				success: function(resultData) {
+					if (resultData['id'] > 0) {
+						alert("GOOD");
+					}
+				}
 			});
 		});
 
 		$("#collapseThree-pub").on("click", function() {
-			var id = "#collapseThree";
+			
 			var title = $("#collapseThree-head").text().trim();
 			
-			$.ajax({url:"http://127.0.0.1:3000/books/1/feeds", success:function(result){
+			var children = $("#collapseThree").children();
+
+			var myKeyVals = [];
+
+			for (var i = 1; i < children.length; i++) {
+				var id = children[i].id.substring(0, children[i].id.indexOf("-"));
+				var clickInput = $("#"+id).next().next().next().text();
 				
-			    }
+				myKeyVals[i] = clickInput;
+			}
+
+			var toSend = {"book":{
+					"title":title,
+					"description":"First From Web",
+					"links": myKeyVals
+				}
+			};
+
+			toSend = JSON.stringify(toSend);
+			//toSend = toSend.replace("\'","");
+
+			console.log(toSend);
+
+			$.ajax({
+				type: 'POST',
+				url: "/books",
+				data: toSend,
+				contentType: "application/json; charset=utf-8",
+    			dataType: "json",
+				success: function(resultData) {
+					if (resultData['id'] > 0) {
+						alert("Your book has been sent.");
+					}
+				}
 			});
 		});
 

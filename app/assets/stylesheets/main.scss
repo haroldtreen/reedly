@@ -259,3 +259,19 @@ label {
 .nice-bar {
 	border-radius:3px;
 }
+
+.add-to-rss {
+	position: absolute;
+	top: -28px;
+	width: 100%;
+	left: 0;
+}
+
+.add-to-rss > input {
+	width: 95%;	
+}
+
+.add-to-rss > img {
+	width: 20px;
+	height: 20px;
+}
