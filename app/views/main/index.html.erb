@@ -6,6 +6,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
+	<div class="top-image">
+		<div class="dropdown">
+		  <button class="btn btn-default dropdown-toggle custom-button" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+		    <img alt="Menu" src="hamburger.png" />
+		  </button>
+		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+		    <li role="presentation"><a role="menuitem" tabindex="-1" id="collapseTwo-pub" href="#">Publish</a></li>
+		  </ul>
+		</div>
+		
+	</div>
 	<div class="row">
 		<div class="col-md-2"></div>
 			<div class="col-md-8">
@@ -21,18 +32,7 @@
 			</select>
 			
 			<div id="rss-feed-article-list">
-				<!--<div class="rss-feed-box">
-					<input id="rss1" type="checkbox" class="input-check rss-side"/><label for="rss1">This one.</label>
-				</div>
-				<div class="rss-feed-box">
-					<input id="rss2" type="checkbox" class="input-check rss-side"/><label for="rss2">This two.</label>
-				</div>
-				<div class="rss-feed-box">
-					<input id="rss3" type="checkbox" class="input-check rss-side"/><label for="rss3">This three.</label>
-				</div>
-				<div class="rss-feed-box">
-					<input id="rss4" type="checkbox" class="input-check rss-side"/><label for="rss4">This Four.</label>
-				</div>-->
+				
 			</div>
 		</div>
 		<div class="col-md-5 stiff">
@@ -260,12 +260,20 @@
 				}
 			};
 
+			toSend = JSON.stringify(toSend);
+			//toSend = toSend.replace("\'","");
+
+			console.log(toSend);
+
 			$.ajax({
 				type: 'POST',
-				url: "127.0.0.1/books",
+				url: "/books",
 				data: toSend,
-				dataType: "text",
-				success: function(resultData) { alert("Save Complete") }
+				contentType: "application/json; charset=utf-8",
+    			dataType: "json",
+				success: function(resultData) {
+					alert("Save Complete: " + resultData['id']);
+				}
 			});
 			
 		});
