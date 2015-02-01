@@ -6,6 +6,7 @@ class CreateBooks < ActiveRecord::Migration
       t.text :description
       t.text :links
       t.string :filepath
+      t.integer :user_id
     end
   end
 end
