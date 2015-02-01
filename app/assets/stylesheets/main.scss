@@ -228,3 +228,15 @@ label {
 	max-height:300px;
 	overflow:auto;
 }
+
+.article-summary {
+	width:100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.article-link {
+	visibility: hidden;
+	height:0px;
+}

@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
 	<style type="text/javascript" src="jquery.js" /></style>
@@ -18,14 +17,11 @@
 		<div class="col-md-1"></div>
 		<div class="col-md-5 rss-feeds">
 			<select class="rss-feed-list">
-				<option value="volvo">CBC</option>
-				<option value="saab">Yahoo</option>
-				<option value="opel">New York Times</option>
-				<option value="audi">Audi</option>
+				
 			</select>
 			
-			<div>
-				<div class="rss-feed-box">
+			<div id="rss-feed-article-list">
+				<!--<div class="rss-feed-box">
 					<input id="rss1" type="checkbox" class="input-check rss-side"/><label for="rss1">This one.</label>
 				</div>
 				<div class="rss-feed-box">
@@ -36,7 +32,7 @@
 				</div>
 				<div class="rss-feed-box">
 					<input id="rss4" type="checkbox" class="input-check rss-side"/><label for="rss4">This Four.</label>
-				</div>
+				</div>-->
 			</div>
 		</div>
 		<div class="col-md-5 stiff">
@@ -127,13 +123,13 @@
 
 	<script>
 
-		var openedBook = "collapseOne";
-		var numberOfRSS = 4;
-		var clicked = new Array();
 
-		function getNewRSS(content, id) {
-			return "<div id='"+id+"-"+openedBook+"' class='rss-feed-box'><div class='up-down'><div class='move-up'><img alt='Up' src='arrow_article_up.png'/></div> <div class='move-down'><img alt='Down' src='arrow_article_down.png' /></div></div><label for='"+id+"-book'>"+content+"</label></div>";
-		}		
+
+		var feeds = null;
+		var currentFeed = null;
+		var rssFeeds = new Array();
+		//var articles = new Array();
+
 
 		function inArray(id) {
 			if (clicked.indexOf(id) > -1) {
@@ -167,7 +163,71 @@
 			}
 		};
 
-		$(".rss-side").on("click", moveMe);
+		function onLoad() {
+
+			// Getting the feeds.
+			$.ajax({url:"http://127.0.0.1:3000/users/1/feeds", success:function(result){
+			    feeds = result;
+			    var count = 1;
+			    $(".rss-feed-list").append("<option value='Everything'>All RSS Feeds</option>");
+			    rssFeeds.push("Everything");
+			    currentFeed = rssFeeds[0];
+			    for (var rss in feeds) {
+			    	rssFeeds.push(rss);
+			    	$(".rss-feed-list").append("<option value='"+rss+"'>" + rss + "</option>");
+			    	for (var article in feeds[rss]) {
+			    			$("#rss-feed-article-list").append("<div data-rss-tag='"+rss+"' class='rss-feed-box'><input id='rss"+count+"' type='checkbox' class='input-check rss-side' /><label for='rss"+count+"'>"+feeds[rss][article]['title']+"</label>" +
+			    				"<p class='article-summary'>"+feeds[rss][article]['summary']+"</p>"+
+			    				"<p class='article-link'>" + feeds[rss][article]['link'] + "</p>" +
+			    				"</div>");
+			    			count++;
+			    		}
+			    	}
+			    	$(".rss-side").on("click", moveMe);
+			    }
+			  });
+		}
+
+
+		$(".rss-feed-list").change(function(e) { 
+			var feedSelected = e.target.value;
+			var children = $("#rss-feed-article-list").children();
+			if (feedSelected == "Everything") {
+				for (var i = 0; i < children.length; i++) {
+					var id = children[i].id;
+					id.style.visibility = "visible";
+					id.style.height = "auto";
+					id.style.padding = "20px 0px";
+				}
+			}
+			else {
+				for (var i = 0; i < children.length; i++) {
+					//alert(children[i].attributes[0].value);
+					var rsstag = children[i].attributes[0].value;
+					if (rsstag != e.target.value) {
+						var id = children[i];
+						id.style.visibility = "hidden";
+						id.style.height = "0px";
+						id.style.padding = "0px 0px";
+					} else {
+						var id = children[i];
+						id.style.visibility = "visible";
+						id.style.height = "auto";
+						id.style.padding = "20px 0px";
+					}
+				}
+			}
+		});
+
+		window.onload = onLoad;
+
+		var openedBook = "collapseOne";
+		var numberOfRSS = 4;
+		var clicked = new Array();
+
+		function getNewRSS(content, id) {
+			return "<div id='"+id+"-"+openedBook+"' class='rss-feed-box'><div class='up-down'><div class='move-up'><img alt='Up' src='arrow_article_up.png'/></div> <div class='move-down'><img alt='Down' src='arrow_article_down.png' /></div></div><label for='"+id+"-book'>"+content+"</label></div>";
+		}
 
 		$("#accordion").on("shown.bs.collapse", function(e) {
 			openedBook = e.target.id;
@@ -207,8 +267,6 @@
 					$(".move-down").attr('onclick','').unbind('click').on("click", movedown);
 				}
 			}
-			
-			//alert(e.target.parentNode.parentNode.parentNode.id);
 
 		}
 
@@ -238,67 +296,7 @@
 			}
 		}
 
-		/*$(document).ready(function(){    
-		    $('#accordion').on('shown', function () {
-		    	alert("GETTING HERE");
-		       $(".icon-chevron-down").removeClass("icon-chevron-down").addClass("icon-chevron-up");
-		       alert($(this).child[0].html);
-		    });
-
-		    $('#accordProfile').on('hidden', function () {
-		       $(".icon-chevron-up").removeClass("icon-chevron-up").addClass("icon-chevron-down");
-		       alert($(this).attr('id'));
-		    });
-		});*/
 	</script>
-
-	<!--<script type="text/javascript">
-		var id = "news-tab";
-		$(document).ready(function() {
-			$('#Tabs li').click(function() {
-				// Setting the temp variable to the string of the news pull out.
-				var temp = "#RightMenu #" + id.substring(0, id.indexOf("-"));
-
-				// Only going to do this if it's not the one currently out.
-				if ($(this).attr('id').search(id) < 0) {
-					// Closing the last one out.
-					$(temp).animate({ width: 'toggle'}, 1000);
-
-					// Animating the actual tab we want.
-					var newOne = "#RightMenu #" + $(this).attr('id').substring(0, $(this).attr('id').indexOf("-"));
-					
-
-					$(newOne).animate({ width: 'toggle'}, 1000);
-
-					// Setting the new id.
-					id = $(this).attr('id');
-				}
-			});
-		});
-
-	/*	$(document).ready(function () {
-		    $('#news-tab').click(function () {
-		        $('#RightMenu #news').animate({
-		            width: 'toggle'
-		        }, 1000);
-		    });
-		});
-		$(document).ready(function () {
-		    $('#tech-tab').click(function () {
-		        $('#RightMenu #tech').animate({
-		            width: 'toggle'
-		        }, 1000);
-		    });
-		});
-		$(document).ready(function () {
-		    $('#other-tab').click(function () {
-		        $('#RightMenu #other').animate({
-		            width: 'toggle'
-		        }, 1000);
-		    });
-		});*/
-	</script>-->
-
 	<footer>
 	</footer>
 </body>
