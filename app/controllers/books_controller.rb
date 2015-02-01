@@ -6,7 +6,9 @@ class BooksController < ApplicationController
 	end
 
 	def create
-		book = Book.create(title: book_params[:title], links: book_params[:links].join(";"), user_id: User.last.id)
+		book = Book.create(title: book_params[:title], links: book_params[:links].join(";").gsub(/'/, ""), user_id: User.last.id)
+		Reedler.to_epub(book)
+		PublishService.send_to_kindle(book)
 		render json: book
 	end
 
@@ -18,6 +20,7 @@ class BooksController < ApplicationController
 		book = Book.find(params[:id])
 		Reedler.to_epub(book)
 		PublishService.send_to_kindle(book)
+		render json: book
 	end
 
 	private 
