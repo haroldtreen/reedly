@@ -213,7 +213,29 @@
 		}
 
 		var movedown = function(e) {
-			alert(e.target.parentNode.parentNode.parentNode.id);
+			var id = e.target.parentNode.parentNode.parentNode.id;
+			var parentId = id.substring(id.indexOf("-")+1);
+			var children = $("#"+parentId).children();
+			var divToMoveLocation = 0;
+			var length = children.length;
+			for (var i = 0; i < children.length; i++) {
+				if (children[i].id == id) {
+					divToMoveLocation = i;
+					break;
+				}
+			}
+			if (children.length > 2) {
+				// We can potentially move up.
+				if (children[length-1].id != id) {
+					// We are not the last in the row.
+					var oldChild = children[divToMoveLocation+1].innerHTML;
+					children[divToMoveLocation+1].innerHTML = children[divToMoveLocation].innerHTML;
+					children[divToMoveLocation].innerHTML = oldChild;
+					// Unbinding any previous ones and moving the new ones up.
+					$(".move-up").attr('onclick','').unbind('click').on("click", moveup);
+					$(".move-down").attr('onclick','').unbind('click').on("click", movedown);
+				}
+			}
 		}
 
 		/*$(document).ready(function(){    
