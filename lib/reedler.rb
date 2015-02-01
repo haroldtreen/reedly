@@ -9,7 +9,10 @@ class Reedler
 		book.save
 		articles = to_articles(book)
 		epub_path = compile_epub(book, articles)
-		FileUtils.mv(epub_path, File.join(Rails.root, 'books', book.id.to_s + ".epub",))
+
+		book_filepath = File.join(Rails.root, 'books', book.id.to_s + ".epub")
+		book.update(filepath: book_filepath)
+		FileUtils.mv(epub_path, book_filepath)
 		FileUtils.rm_rf(File.join(TEMP_PATH, book.id.to_s))
 	end
 
