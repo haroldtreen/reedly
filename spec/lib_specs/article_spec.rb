@@ -18,4 +18,14 @@ describe Article do
 		article = Article.new(content: content)
 		expect(article.content).to eq(content)
 	end
+
+	it 'outputs html' do
+		article = Article.new(content: "<body><p>Body</p></body>", title: "Title")
+		expect(article.to_html).to eq("<h1>Title</h1>\n<body><p>Body</p></body>")
+	end
+
+	it 'creates a path' do
+		article = Article.new(title: "Title")
+		expect(article.markdown_path("/base")).to eq("/base/Title.md")
+	end
 end

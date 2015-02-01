@@ -37,6 +37,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
     arel (6.0.0)
+    awesome_print (1.6.1)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
@@ -113,7 +114,12 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.4.2)
     rdoc (4.2.0)
+<<<<<<< HEAD
       json (~> 1.4)
+=======
+    reverse_markdown (0.6.1)
+      nokogiri
+>>>>>>> 4b1101c066aa19f7e09119717f2d42ecaa37f71a
     rpub (0.5.0)
       builder
       commander
@@ -188,14 +194,17 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
   byebug
   coffee-rails (~> 4.1.0)
   jbuilder (~> 2.0)
   jquery-rails
   rails (= 4.2.0)
+  reverse_markdown
   rpub
   rspec-rails
   ruby-readability
+  rubyzip
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
   spring

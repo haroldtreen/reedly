@@ -8,4 +8,8 @@ describe Book, :type => :model do
 	it{ expect(@book).to respond_to('title') }
 	it{ expect(@book).to respond_to('description') }
 	it{ expect(@book).to respond_to('links') }
+
+	it 'parses its links' do
+		expect(@book.links_arr).to eq(['www.g.c', 'www.e.c', 'www.t.c'])
+	end
 end
