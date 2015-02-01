@@ -9,7 +9,7 @@
 	<div class="top-image">
 		<div class="dropdown">
 		  <button class="btn btn-default dropdown-toggle custom-button" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-		    <img alt="Menu" src="hamburger.png" />
+		    <img class="nice-bar" alt="Menu" src="hamburger.png" />
 		  </button>
 		  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
 		    <li role="presentation"><a role="menuitem" tabindex="-1" id="collapseTwo-pub" href="#">Publish</a></li>
@@ -272,7 +272,9 @@
 				contentType: "application/json; charset=utf-8",
     			dataType: "json",
 				success: function(resultData) {
-					alert("Save Complete: " + resultData['id']);
+					if (resultData['id'] > 0) {
+						alert("Your book has been sent.";
+					{
 				}
 			});
 			
