@@ -5,7 +5,11 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'main#index'
 
-  resources :books
+  resources :books do
+    member do
+      post 'publish'
+    end
+  end
 
   resources :users do
     member do
