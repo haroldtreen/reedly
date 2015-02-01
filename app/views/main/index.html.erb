@@ -128,6 +128,7 @@
 		var feeds = null;
 		var currentFeed = null;
 		var rssFeeds = new Array();
+		var numberOfRSS = 1;
 		//var articles = new Array();
 
 
@@ -163,6 +164,12 @@
 			}
 		};
 
+		function strip(html) {
+		   var tmp = document.createElement("DIV");
+		   tmp.innerHTML = html;
+		   return tmp.textContent || tmp.innerText || "";
+		}
+
 		function onLoad() {
 
 			// Getting the feeds.
@@ -176,16 +183,16 @@
 			    	rssFeeds.push(rss);
 			    	$(".rss-feed-list").append("<option value='"+rss+"'>" + rss + "</option>");
 			    	for (var article in feeds[rss]) {
-			    			$("#rss-feed-article-list").append("<div data-rss-tag='"+rss+"' class='rss-feed-box'><input id='rss"+count+"' type='checkbox' class='input-check rss-side' /><label for='rss"+count+"'>"+feeds[rss][article]['title']+"</label>" +
-			    				"<p class='article-summary'>"+feeds[rss][article]['summary']+"</p>"+
-			    				"<p class='article-link'>" + feeds[rss][article]['link'] + "</p>" +
+			    			$("#rss-feed-article-list").append("<div data-rss-tag='"+rss+"' class='rss-feed-box'><input id='rss"+numberOfRSS+"' type='checkbox' class='input-check rss-side' /><label for='rss"+numberOfRSS+"'>"+feeds[rss][article]['title']+"</label>" +
+			    				"<p class='article-summary'>"+strip(feeds[rss][article]['summary'])+"</p>"+
+			    				"<p class='article-link'>'" + feeds[rss][article]['link'] + "'</p>" +
 			    				"</div>");
-			    			count++;
+			    			numberOfRSS++;
 			    		}
-			    	}
-			    	$(".rss-side").on("click", moveMe);
 			    }
-			  });
+			    $(".rss-side").on("click", moveMe);
+			    }
+			});
 		}
 
 
@@ -194,7 +201,7 @@
 			var children = $("#rss-feed-article-list").children();
 			if (feedSelected == "Everything") {
 				for (var i = 0; i < children.length; i++) {
-					var id = children[i].id;
+					var id = children[i];
 					id.style.visibility = "visible";
 					id.style.height = "auto";
 					id.style.padding = "20px 0px";
@@ -222,7 +229,7 @@
 		window.onload = onLoad;
 
 		var openedBook = "collapseOne";
-		var numberOfRSS = 4;
+		
 		var clicked = new Array();
 
 		function getNewRSS(content, id) {
@@ -232,7 +239,7 @@
 		$("#accordion").on("shown.bs.collapse", function(e) {
 			openedBook = e.target.id;
 			clicked = new Array();
-			for (var i = 0; i <= numberOfRSS; i++) {
+			for (var i = 1; i <= numberOfRSS; i++) {
 
 				// If the openedBook does not contain a div named rss.
 				if (!($("#"+openedBook).find("#rss"+i+"-"+openedBook).length)) {
@@ -246,10 +253,12 @@
 
 		var moveup = function(e) {
 			var id = e.target.parentNode.parentNode.parentNode.id;
-			var parentId = id.substring(id.indexOf("-")+1);
+			var parentId = e.target.parentNode.parentNode.parentNode.parentNode.id;
 			var children = $("#"+parentId).children();
 			var divToMoveLocation = 0;
+
 			for (var i = 0; i < children.length; i++) {
+				//alert(children[i].id);
 				if (children[i].id == id) {
 					divToMoveLocation = i;
 					break;
@@ -258,10 +267,16 @@
 			if (children.length > 2) {
 				// We can potentially move up.
 				if (children[1].id != id) {
-					// We are not the first in the row.
+					var oldId = children[divToMoveLocation-1].id;
+					var newId = children[divToMoveLocation].id;
+
+					// We are not the first in the row.					
 					var oldChild = children[divToMoveLocation-1].innerHTML;
 					children[divToMoveLocation-1].innerHTML = children[divToMoveLocation].innerHTML;
 					children[divToMoveLocation].innerHTML = oldChild;
+
+					children[divToMoveLocation].id = oldId;
+					children[divToMoveLocation-1].id = newId;
 					// Unbinding any previous ones and moving the new ones up.
 					$(".move-up").attr('onclick','').unbind('click').on("click", moveup);
 					$(".move-down").attr('onclick','').unbind('click').on("click", movedown);
@@ -272,11 +287,12 @@
 
 		var movedown = function(e) {
 			var id = e.target.parentNode.parentNode.parentNode.id;
-			var parentId = id.substring(id.indexOf("-")+1);
+			var parentId = e.target.parentNode.parentNode.parentNode.parentNode.id;
 			var children = $("#"+parentId).children();
 			var divToMoveLocation = 0;
-			var length = children.length;
+
 			for (var i = 0; i < children.length; i++) {
+				//alert(children[i].id);
 				if (children[i].id == id) {
 					divToMoveLocation = i;
 					break;
@@ -284,11 +300,17 @@
 			}
 			if (children.length > 2) {
 				// We can potentially move up.
-				if (children[length-1].id != id) {
+				if (children[length].id != id) {
+					var oldId = children[divToMoveLocation+1].id;
+					var newId = children[divToMoveLocation].id;
+
 					// We are not the last in the row.
 					var oldChild = children[divToMoveLocation+1].innerHTML;
 					children[divToMoveLocation+1].innerHTML = children[divToMoveLocation].innerHTML;
 					children[divToMoveLocation].innerHTML = oldChild;
+
+					children[divToMoveLocation].id = oldId;
+					children[divToMoveLocation+1].id = newId;
 					// Unbinding any previous ones and moving the new ones up.
 					$(".move-up").attr('onclick','').unbind('click').on("click", moveup);
 					$(".move-down").attr('onclick','').unbind('click').on("click", movedown);
