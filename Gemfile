@@ -30,6 +30,8 @@ gem "ruby-readability", :require => 'readability'
 gem 'awesome_print'
 gem 'simple-rss'
 
+gem 'kindlegen'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

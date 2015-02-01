@@ -6,6 +6,7 @@ class Reedler
 	TEMP_PATH = File.join(Rails.root, 'tmp', 'books')
 
 	def self.to_epub(book)
+		dir = Dir.pwd
 		book.save
 		articles = to_articles(book)
 		epub_path = compile_epub(book, articles)
@@ -14,6 +15,7 @@ class Reedler
 		book.update(filepath: book_filepath)
 		FileUtils.mv(epub_path, book_filepath)
 		FileUtils.rm_rf(File.join(TEMP_PATH, book.id.to_s))
+		Dir.chdir dir
 	end
 
 	def self.to_articles(book)
@@ -50,7 +52,7 @@ class Reedler
 
 		save_to_markdowns(articles, tmp_path)
 
-		create_config({title: book.title, author: 'Reedly', toc: true, max_level: 1 })
+		create_config({title: book.title, author: 'Reedly', toc: true, max_level: 1, language: "English" })
 		`rpub compile`
 
 		Dir.glob('*.epub').first

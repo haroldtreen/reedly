@@ -17,9 +17,13 @@ class FeedsManager
 
 		feeds.each do |f|
 			formatted_data[f.channel.title] = f.items.map do |i| 
-				i.description =  i.description.force_encoding('UTF-8') if i.description
+				summary =  i.summary
+				summary ||= i.content
+				summary ||= i.description
+				summary.force_encoding('UTF-8')
+				summary = Nokogiri::HTML(summary).text
 				i.title = i.title.force_encoding('UTF-8') if i.title
-				{ title: i.title, description: i.description, link: i.link }
+				{ title: i.title, summary: summary, link: i.link }
 			end
 		end
 		formatted_data
