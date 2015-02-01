@@ -14,8 +14,7 @@ class Book < ActiveRecord::Base
 	def mobi_path
 		mobi = filepath.gsub(/\.epub/, '.mobi')
 		unless File.exists?(mobi)
-			puts File.basename(mobi)
-			puts Kindlegen.run(filepath, "-o", File.basename(mobi))
+			Kindlegen.run(filepath, "-o", File.basename(mobi))
 		end
 		mobi
 	end

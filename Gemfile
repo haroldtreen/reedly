@@ -32,6 +32,8 @@ gem 'simple-rss'
 
 gem 'kindlegen'
 
+gem 'figaro'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
