@@ -49,7 +49,7 @@
 							    <img alt="Options" src="dots_hamburger.png" />
 							  </button>
 							  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-							    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Publish</a></li>
+							    <li role="presentation"><a role="menuitem" tabindex="-1" id="collapseOne-pub" href="#">Publish</a></li>
 							  </ul>
 							</div>
 				    	</div>
@@ -73,7 +73,7 @@
 							    <img alt="Options" src="dots_hamburger.png" />
 							  </button>
 							  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-							    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Publish</a></li>
+							    <li role="presentation"><a role="menuitem" tabindex="-1" id="collapseTwo-pub" href="#">Publish</a></li>
 							  </ul>
 							</div>
 				    	</div>
@@ -97,7 +97,7 @@
 							    <img alt="Options" src="dots_hamburger.png" />
 							  </button>
 							  <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-							    <li role="presentation"><a role="menuitem" tabindex="-1" href="#">Publish</a></li>
+							    <li role="presentation"><a role="menuitem" tabindex="-1" id="collapseThree-pub" href="#">Publish</a></li>
 							  </ul>
 							</div>
 				    	</div>
@@ -110,10 +110,12 @@
 				    </div>
 				  </div>
 				</div>
+
+			<div class="add-book">
+				<a href="#" id="add-book"><img alt="Add Book" src="plus.png" /></a>
+			</div>	
 		</div>
-		<div>
-			<a href="#" id="add-book"><img alt="Add Book" src="plus.png" /></a>
-		</div>
+		
 	
 	</div>
 	
@@ -235,6 +237,58 @@
 		function getNewRSS(content, id) {
 			return "<div id='"+id+"-"+openedBook+"' class='rss-feed-box'><div class='up-down'><div class='move-up'><img alt='Up' src='arrow_article_up.png'/></div> <div class='move-down'><img alt='Down' src='arrow_article_down.png' /></div></div><label for='"+id+"-book'>"+content+"</label></div>";
 		}
+
+		$("#collapseOne-pub").on("click", function(e) {
+			//var id = "#collapseOne";
+			var title = $("#collapseOne-head").text().trim();
+			
+			var children = $("#collapseOne").children();
+
+			var myKeyVals = [];
+
+			for (var i = 1; i < children.length; i++) {
+				var id = children[i].id.substring(0, children[i].id.indexOf("-"));
+				var clickInput = $("#"+id).next().next().next().text();
+				
+				myKeyVals[i] = clickInput;
+			}
+
+			var toSend = {"book":{
+					"title":title,
+					"description":"First From Web",
+					"links": myKeyVals
+				}
+			};
+
+			$.ajax({
+				type: 'POST',
+				url: "127.0.0.1/books",
+				data: toSend,
+				dataType: "text",
+				success: function(resultData) { alert("Save Complete") }
+			});
+			
+		});
+
+		$("#collapseTwo-pub").on("click", function() {
+			var id = "#collapseTwo";
+			var title = $("#collapseTwo-head").text().trim();
+			
+			$.ajax({url:"http://127.0.0.1:3000/books/1/feeds", success:function(result){
+				
+			    }
+			});
+		});
+
+		$("#collapseThree-pub").on("click", function() {
+			var id = "#collapseThree";
+			var title = $("#collapseThree-head").text().trim();
+			
+			$.ajax({url:"http://127.0.0.1:3000/books/1/feeds", success:function(result){
+				
+			    }
+			});
+		});
 
 		$("#accordion").on("shown.bs.collapse", function(e) {
 			openedBook = e.target.id;
