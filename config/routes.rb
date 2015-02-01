@@ -7,6 +7,12 @@ Rails.application.routes.draw do
 
   resources :books
 
+  resources :users do
+    member do
+      get 'feeds'
+    end
+  end
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 

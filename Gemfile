@@ -28,6 +28,7 @@ gem 'rpub'
 gem 'reverse_markdown'
 gem "ruby-readability", :require => 'readability'
 gem 'awesome_print'
+gem 'simple-rss'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
